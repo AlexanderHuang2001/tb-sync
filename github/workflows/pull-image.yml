@@ -1,0 +1,29 @@
+name: Pull and Push Image
+on: workflow_dispatch
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Aliyun ACR
+        run: |
+          docker login \
+            --username=${{ secrets.ALI_USERNAME }} \
+            --password=${{ secrets.ALI_PASSWORD }} \
+            crpi-c2f6hhgn76wu5r0l.cn-beijing.personal.cr.aliyuncs.com
+
+      - name: Pull and Push thingsboard
+        run: |
+          docker pull thingsboard/tb-node:4.3.0.1
+          docker tag thingsboard/tb-node:4.3.0.1 \
+            crpi-c2f6hhgn76wu5r0l.cn-beijing.personal.cr.aliyuncs.com/thingsboard2001/tb-node:4.3.0.1
+          docker push \
+            crpi-c2f6hhgn76wu5r0l.cn-beijing.personal.cr.aliyuncs.com/thingsboard2001/tb-node:4.3.0.1
+
+      - name: Pull and Push postgres
+        run: |
+          docker pull postgres:16
+          docker tag postgres:16 \
+            crpi-c2f6hhgn76wu5r0l.cn-beijing.personal.cr.aliyuncs.com/thingsboard2001/postgres:16
+          docker push \
+            crpi-c2f6hhgn76wu5r0l.cn-beijing.personal.cr.aliyuncs.com/thingsboard2001/postgres:16
